@@ -13,6 +13,10 @@ and reasoning of this workflow
 
 from smartagg_builder import __version__ as VERSION
 from smartagg_builder.builder import Builder
+import os
+
+
+CONFIG_PATH = os.getenv('CONFIG_FILE_PATH', './config.yaml')
 
 
 def cli():
@@ -27,7 +31,7 @@ def cli():
     """
     try:
         # Generate  the BUILDER object
-        builder = Builder('./config.yaml')
+        builder = Builder(CONFIG_PATH)
         logger = builder.get_logger()
         result = None
         # Check the account
@@ -44,8 +48,9 @@ def cli():
         # Profit!
         logger.info('Done!')
         return result
-    except Exception:
+    except Exception as e:
         import sys
+        print(e)
         sys.exit(1)
 
 
@@ -55,5 +60,6 @@ if __name__ == "__main__":
     try:
         result = cli()
         sys.exit(0)
-    except Exception:
+    except Exception as e:
+        print(e)
         sys.exit(1)

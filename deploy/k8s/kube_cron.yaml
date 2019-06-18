@@ -1,0 +1,37 @@
+
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: smartagg-task
+spec:
+# crontab.guru
+  schedule: "*/30 * * * *"
+  suspend: False
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: smartagg-task
+              image: gcr.io/geographica-gs/carto/smartagg-builder:master
+              imagePullPolicy: Always
+              resources:
+                requests: &resources
+                  memory: "512Mi"
+                  cpu: "100m"
+                limits: *resources
+              env:
+                - name: CONFIG_FILE_PATH
+                  value: "/tmp/smartagg-secrets/config.yaml"
+              volumeMounts:
+                - name: smartagg-secrets-files
+                  mountPath: /tmp/smartagg-secrets/
+                  readOnly: true
+          volumes:
+            - name: smartagg-secrets-files
+              secret:
+                secretName: smartagg-secrets
+                items:
+                  - key: task-config.yaml
+                    path: config.yaml

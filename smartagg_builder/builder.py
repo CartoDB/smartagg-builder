@@ -16,7 +16,7 @@ from pyrestcli.exceptions import NotFoundException
 
 import logging
 
-from yaml import load, CLoader as Loader
+from yaml import load, FullLoader as Loader
 from pathlib import Path
 
 import json

@@ -1,0 +1,51 @@
+kind: pipeline
+name: deploy
+trigger:
+  branch:
+    - master
+  event:
+    - push
+  repo:
+    - CartoDB/smartagg-builder
+
+steps:
+  - name: docker_tags_push_event
+    image: debian:stable-slim
+    commands:
+      - echo -n "${DRONE_COMMIT_SHA},${DRONE_COMMIT_BRANCH//\/__},ci-${DRONE_BUILD_NUMBER}" > .tags
+
+  - name: docker_build_deploy
+    image: plugins/gcr
+    resources:
+      limits: &resources
+        memory: "1024m"
+      requests: *resources
+    settings:
+      repo: gcr.io/geographica-gs/carto/smartagg-builder
+      registry: gcr.io
+      json_key:
+        from_secret: carto_google_docker_credentials
+      cache_from:
+        - gcr.io/geographica-gs/carto/smartagg-builder:${DRONE_COMMIT_BRANCH//\//__}
+        - gcr.io/geographica-gs/carto/smartagg-builder:master
+
+  - name: edit_k8s_tags
+    image: bitlayer/kustomize:v2.0.3
+    commands:
+      - kustomize version
+      - cd deploy/k8s/
+      - "kustomize edit set image gcr.io/geographica-gs/carto/smartagg-builder=:${DRONE_COMMIT_SHA}"
+      - "kustomize edit set nameprefix 'carto-'"
+      - "kustomize edit set namespace production"
+
+  - name: docker_upload
+    image: google/cloud-sdk:241.0.0
+    environment:
+      GCLOUD_CREDENTIALS:
+        from_secret: carto_k8s_credentials
+    commands:
+      - echo "$${GCLOUD_CREDENTIALS}" | base64 --decode > /tmp/g_credentials.json
+      - gcloud auth activate-service-account --key-file /tmp/g_credentials.json
+      - gcloud container clusters get-credentials carto --zone europe-west1-b --project geographica-gs
+      - kubectl version
+      - kubectl apply -k deploy/k8s/
