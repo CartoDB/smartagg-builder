@@ -12,7 +12,7 @@ steps:
   - name: docker_tags_push_event
     image: debian:stable-slim
     commands:
-      - echo -n "${DRONE_COMMIT_SHA},${DRONE_COMMIT_BRANCH//\/__},ci-${DRONE_BUILD_NUMBER}" > .tags
+      - echo -n "${DRONE_COMMIT_SHA},${DRONE_COMMIT_BRANCH//\//__},ci-${DRONE_BUILD_NUMBER}" > .tags
 
   - name: docker_build_deploy
     image: plugins/gcr
