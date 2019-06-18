@@ -2,7 +2,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: smartagg-task
+  name: carto-smartagg-task
 spec:
 # crontab.guru
   schedule: "*/30 * * * *"
@@ -31,7 +31,7 @@ spec:
           volumes:
             - name: smartagg-secrets-files
               secret:
-                secretName: smartagg-secrets
+                secretName: carto-smartagg-secrets
                 items:
                   - key: task-config.yaml
                     path: config.yaml

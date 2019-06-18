@@ -35,7 +35,6 @@ steps:
       - kustomize version
       - cd deploy/k8s/
       - "kustomize edit set image gcr.io/geographica-gs/carto/smartagg-builder=:${DRONE_COMMIT_SHA}"
-      - "kustomize edit set nameprefix 'carto-'"
       - "kustomize edit set namespace production"
 
   - name: docker_upload
