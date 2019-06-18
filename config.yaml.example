@@ -1,0 +1,15 @@
+sb:
+    log_level: 20 # DEBUG 10, INFO 20, WARNING 30, ERROR 40, CRITICAL 50
+    carto_account:
+        user: your_user
+        organization: your_org
+        api_url: https://your_user.carto.com
+        api_key: your_api_key
+    
+    maps:
+        name_filter: "[SB]"
+        delimiter: "sb"
+
+    named_maps:
+        suffix: "_sb"
+
