@@ -22,8 +22,11 @@ spec:
                   cpu: "100m"
                 limits: *resources
               env:
-                - name: CONFIG_FILE_PATH
+                - name: SMARTAGG_CONFIG_FILE_PATH
                   value: "/tmp/smartagg-secrets/config.yaml"
+              envFrom:
+                - configMapRef:
+                    name: carto-smartagg-config
               volumeMounts:
                 - name: smartagg-secrets-files
                   mountPath: /tmp/smartagg-secrets/

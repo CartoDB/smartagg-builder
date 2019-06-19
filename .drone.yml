@@ -36,6 +36,7 @@ steps:
       - cd deploy/k8s/
       - "kustomize edit set image gcr.io/geographica-gs/carto/smartagg-builder=:${DRONE_COMMIT_SHA}"
       - "kustomize edit set namespace production"
+      - sed -i '/\bSMARTAGG_PROMETHEUS_ENABLED\b/ s/\bFalse\b/True/g' kube_config.yaml
 
   - name: docker_upload
     image: google/cloud-sdk:241.0.0

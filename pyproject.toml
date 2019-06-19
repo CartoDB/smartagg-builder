@@ -11,6 +11,8 @@ sb = "smartagg_builder.cli:cli"
 python = "^3.6"
 carto = "^1.4"
 PyYAML = "^5.1"
+prometheus_client = "^0.7.0"
+environs = "^4.2"
 
 [tool.poetry.dev-dependencies]
 ipdb = "^0.12.0"

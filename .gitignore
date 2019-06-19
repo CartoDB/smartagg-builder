@@ -126,3 +126,4 @@ dmypy.json
 # smartagg_builder
 config.yaml
 tests/index.html
+.idea

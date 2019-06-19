@@ -1,0 +1,15 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: carto-smartagg-config
+data:
+  # Prometheus config
+    # This variables is autoset to 'True' in ci/cd
+  SMARTAGG_PROMETHEUS_ENABLED: "False"
+  SMARTAGG_PROMETHEUS_SERVER: "monitoring-pushgateway-rerouter:9091"
+  SMARTAGG_PROMETHEUS_JOB_NAME: "smartagg-builder-task"
+  # SMARTAGG_PROMETHEUS_GROUPING_KEYS: |
+  #   {
+  #     "key1": "value1",
+  #     "key2": "value2",
+  #   }
